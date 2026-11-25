@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>КК Изпит – Корпоративни комуникации</title>
+<meta name="description" content="Офлайн приложение за подготовка за устния изпит по Корпоративни комуникации и убеждаване.">
+<meta name="theme-color" content="#1e3a8a">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="КК Изпит">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <button class="back" id="backBtn" aria-label="Назад" hidden>‹</button>
+  <h1 id="pageTitle">КК Изпит</h1>
+  <span class="countdown" id="countdown"></span>
+</header>
+<main id="app" tabindex="-1"></main>
+<nav class="tabbar" id="tabbar">
+  <a href="#home" data-tab="home"><span class="ic">⌂</span><span>Начало</span></a>
+  <a href="#topics" data-tab="topics"><span class="ic">☰</span><span>Теми</span></a>
+  <a href="#cards" data-tab="cards"><span class="ic">▣</span><span>Карти</span></a>
+  <a href="#quiz" data-tab="quiz"><span class="ic">✓</span><span>Тест</span></a>
+  <a href="#more" data-tab="more"><span class="ic">⋯</span><span>Още</span></a>
+</nav>
+<div class="toast" id="toast" role="status"></div>
+<script src="data/topics1.js"></script>
+<script src="data/topics2.js"></script>
+<script src="data/topics3.js"></script>
+<script src="data/practice1.js"></script>
+<script src="data/practice2.js"></script>
+<script src="data/practice3.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

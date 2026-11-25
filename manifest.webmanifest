@@ -1,0 +1,16 @@
+{
+  "name": "КК Изпит – Корпоративни комуникации",
+  "short_name": "КК Изпит",
+  "description": "Офлайн подготовка за устния изпит по Корпоративни комуникации и убеждаване.",
+  "lang": "bg",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f6fb",
+  "theme_color": "#1e3a8a",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
