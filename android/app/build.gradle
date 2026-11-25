@@ -1,0 +1,35 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'bg.kk.izpit'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'bg.kk.izpit'
+        minSdk 21
+        targetSdk 34
+        versionCode((System.getenv('VERSION_CODE') ?: '1').toInteger())
+        versionName '1.' + (System.getenv('VERSION_CODE') ?: '0')
+    }
+
+    signingConfigs {
+        release {
+            storeFile file(System.getenv('KS_PATH') ?: 'kk-izpit.keystore')
+            storePassword 'kkizpit'
+            keyAlias 'kk'
+            keyPassword 'kkizpit'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}

@@ -1,0 +1,73 @@
+name: Build APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: apk
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      # Един и същ ключ за всяка версия, за да може новата да се инсталира върху старата.
+      - name: Keystore (reuse from the apk branch, or create once)
+        run: |
+          if git fetch --depth 1 origin apk 2>/dev/null && git show FETCH_HEAD:kk-izpit.keystore > /tmp/kk.keystore 2>/dev/null; then
+            echo "Reusing keystore"
+          else
+            rm -f /tmp/kk.keystore
+            keytool -genkeypair -keystore /tmp/kk.keystore -alias kk -keyalg RSA -keysize 2048 -validity 10000 \
+              -storepass kkizpit -keypass kkizpit -dname "CN=KK Izpit"
+          fi
+
+      - name: Copy the web app into the APK assets
+        run: |
+          mkdir -p android/app/src/main/assets/www
+          cp -r index.html styles.css app.js manifest.webmanifest data icons android/app/src/main/assets/www/
+
+      - name: Build signed APK
+        working-directory: android
+        env:
+          KS_PATH: /tmp/kk.keystore
+          VERSION_CODE: ${{ github.run_number }}
+        run: gradle assembleRelease --no-daemon
+
+      - name: Save APK to the apk branch
+        run: |
+          mkdir -p /tmp/out
+          cp android/app/build/outputs/apk/release/app-release.apk /tmp/out/kk-izpit.apk
+          cp /tmp/kk.keystore /tmp/out/kk-izpit.keystore
+          cd /tmp/out
+          git init -q -b apk
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add -A
+          git commit -q -m "APK build ${{ github.run_number }} from ${{ github.sha }}"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" apk
+
+      - name: GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.${{ github.run_number }}
+          name: КК Изпит v1.${{ github.run_number }}
+          body: Свали kk-izpit.apk на телефона и го отвори, за да го инсталираш.
+          files: /tmp/out/kk-izpit.apk
+          make_latest: true
